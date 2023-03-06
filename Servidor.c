@@ -1,69 +1,76 @@
-#define WIN32_LEAN_AND_MEAN
 #include <stdio.h>
-#include <stdlib.h>
 #include <winsock2.h>
-#include <windows.h>
-#include <ws2tcpip.h>
+#include <string.h>
 
-#pragma comment(lib,"ws2_32.lib")
-
-int main(){
+int main() {
     WSADATA wsa;
     SOCKET s, new_socket;
     struct sockaddr_in server, client;
-    int c;
-    char *message; 
+    int c, recv_size;
+    int num;
+    char message[2000], reply[2000];
 
-    printf("\nInicializando Winsock...\n");
-    if(WSAStartup(MAKEWORD(2,2),&wsa) != 0){
-        printf("Fallo. Error de codigo: %d", WSAGetLastError());
-        return 1; 
+    // Inicializar la biblioteca de sockets de Windows
+    if (WSAStartup(MAKEWORD(2,2),&wsa) != 0) {
+        printf("Error al inicializar Winsock\n");
+        return 1;
     }
-    printf("Inicializando.\n");
 
-    //Creando el socket 
-    if ((s=socket(AF_INET, SOCK_STREAM, 0)) == INVALID_SOCKET){
-        printf("Fallo en la creacion del socket. Error de codigo: %d", WSAGetLastError());
-        return 1; 
+    // Crear el socket del servidor
+    if ((s = socket(AF_INET, SOCK_STREAM, 0)) == INVALID_SOCKET) {
+        printf("Error al crear el socket del servidor\n");
+        return 1;
     }
-    printf("Socket creado.\n");
 
-    //Especifica la direccion del servidor
+    // Configurar la estructura del servidor
     server.sin_family = AF_INET;
     server.sin_addr.s_addr = INADDR_ANY;
-    server.sin_port = htons(5000);
+    server.sin_port = htons(8888);
 
-    //Enlaza el socket al puerto
-    if(bind(s,(struct sockaddr *)&server, sizeof(server)) == SOCKET_ERROR){
-        printf("Fallo al enalzar. Error de codigo: %d", WSAGetLastError());
+    // Vincular el socket del servidor al puerto
+    if (bind(s,(struct sockaddr *)&server, sizeof(server)) == SOCKET_ERROR) {
+        printf("Error al vincular el socket del servidor\n");
         return 1;
-    }    
+    }
 
-    printf("Enlazado.\n");
+    // Escuchar las conexiones entrantes
+    listen(s, 3);
 
-    //Escucha las conexiones entrantes
-    listen(s,3);
-
-    //Acepta una conexion entrante 
-    printf("Esperando por conexiones...");
+    // Esperar las conexiones entrantes de los clientes
+    puts("Esperando conexiones entrantes...");
     c = sizeof(struct sockaddr_in);
-    while((new_socket = accept(s,(struct sockaddr*)&client, &c)) != INVALID_SOCKET){
-        printf("Conexion aceptada.\n");
+    while ((new_socket = accept(s, (struct sockaddr *)&client, &c))) {
+        puts("Conexión aceptada");
 
-        //Responde al cliente 
-        message = "Hola, Cliente. Soy el servidor. Hola desde el otro lado.";
-        send(new_socket, message, strlen(message),0);
+        // Recibir el mensaje del cliente
+        memset(message, 0, 2000);
+        if ((recv_size = recv(new_socket, message, 2000, 0)) == SOCKET_ERROR) {
+            puts("Error al recibir el mensaje del cliente");
+            return 1;
+        }
+        num=atoi(message);
+        
+        // Imprimir el mensaje recibido del cliente
+        printf("Mensaje recibido del cliente: %d\n", num);
+        // Enviar una respuesta al cliente
+        itoa(num+1,reply,10);
+        //strcpy(reply, );
+        if (send(new_socket, reply, strlen(reply), 0) == SOCKET_ERROR) {
+            puts("Error al enviar la respuesta al cliente");
+            return 1;
+        }
+
+        // Cerrar la conexión con el cliente
+        closesocket(new_socket);
     }
 
-    if(new_socket == INVALID_SOCKET){
-        printf("Fallo al aceptar la conexion. Error de codigo: %d", WSAGetLastError());
+    if (new_socket == INVALID_SOCKET) {
+        printf("Error al aceptar la conexión\n");
         return 1;
     }
 
-    //Cierra el socket
     closesocket(s);
     WSACleanup();
 
     return 0;
-    
 }
