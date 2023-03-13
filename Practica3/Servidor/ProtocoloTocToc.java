@@ -45,57 +45,53 @@ public class ProtocoloTocToc {
             System.out.println("y: " +textoSeparado[2]);
             int xv = Integer.parseInt(x);
             int yv = Integer.parseInt(y);
-                if(operando.equals("suma")){
-                    suma operacionSuma= new suma(xv,yv);
-                    operacionSuma.start();
-
-                }else if(operando.equals("resta")){
-                    resta operacionResta= new resta(xv,yv);
-                    operacionResta.start();
-                }else if(operando.equals("multiplicacion")){
-                    multiplicacion operacionMultiplicacion= new multiplicacion(xv,yv);
-                    operacionMultiplicacion.start();
-                }else if(operando.equals("division")){
-                    division operacionDivision= new division(xv,yv);
-                    operacionDivision.start();
+                
+            if(operando.equals("multiplicacion")){
+                multiplicacion operacionMultiplicacion= new multiplicacion(xv,yv);
+                operacionMultiplicacion.start();
+                textoDeSalida = operacionMultiplicacion.multiplicacionString();
+            }else if(operando.equals("division")){
+                division operacionDivision= new division(xv,yv);
+                operacionDivision.start();
+                textoDeSalida = operacionDivision.divisionString();
                 }
 
             break;
          }
          
             //estado = ENVIATOCTOC;
-        } else if (estado == ENVIATOCTOC) {
-            if (TextoRecibido.equalsIgnoreCase("¿Quién está ahí?")) {
-                textoDeSalida = pistas[BromaActual];
-                estado = PISTAENVIADA;
-            } else {
-                textoDeSalida = "Se supone que debes decir  \"¿Quién está ahí?\"! " +
-			    "Intenta de nuevo . Toc! Toc!";
-            }
-        } else if (estado == PISTAENVIADA) {
-            if (TextoRecibido.equalsIgnoreCase(pistas[BromaActual] + "¿Quien?")) {
-                textoDeSalida = respuestas[BromaActual] + "¿Quieres otro? (y/n)";
-                estado = OTRA;
-            } else {
-                textoDeSalida = "Se supone que debes decir \"" + 
-			    pistas[BromaActual] + 
-			    " Quien?\"" + 
-			    "!Intenta de nuevo . Toc! Toc!";
-                estado = ENVIATOCTOC;
-            }
-        } else if (estado == OTRA) {
-            if (TextoRecibido.equalsIgnoreCase("y")) {
-                textoDeSalida = "Toc! Toc!";
-                if (BromaActual == (NUMEROBROMAS - 1))
-                    BromaActual = 0;
-                else
-                    BromaActual++;
-                estado = ENVIATOCTOC;
-            } else {
-                textoDeSalida = "Adios.";
-                estado = ESPERANDO;
-            }
-        }
-        return textoDeSalida;
-    }
+    //     } else if (estado == ENVIATOCTOC) {
+    //         if (TextoRecibido.equalsIgnoreCase("¿Quién está ahí?")) {
+    //             textoDeSalida = pistas[BromaActual];
+    //             estado = PISTAENVIADA;
+    //         } else {
+    //             textoDeSalida = "Se supone que debes decir  \"¿Quién está ahí?\"! " +
+	// 		    "Intenta de nuevo . Toc! Toc!";
+    //         }
+    //     } else if (estado == PISTAENVIADA) {
+    //         if (TextoRecibido.equalsIgnoreCase(pistas[BromaActual] + "¿Quien?")) {
+    //             textoDeSalida = respuestas[BromaActual] + "¿Quieres otro? (y/n)";
+    //             estado = OTRA;
+    //         } else {
+    //             textoDeSalida = "Se supone que debes decir \"" + 
+	// 		    pistas[BromaActual] + 
+	// 		    " Quien?\"" + 
+	// 		    "!Intenta de nuevo . Toc! Toc!";
+    //             estado = ENVIATOCTOC;
+    //         }
+    //     } else if (estado == OTRA) {
+    //         if (TextoRecibido.equalsIgnoreCase("y")) {
+    //             textoDeSalida = "Toc! Toc!";
+    //             if (BromaActual == (NUMEROBROMAS - 1))
+    //                 BromaActual = 0;
+    //             else
+    //                 BromaActual++;
+    //             estado = ENVIATOCTOC;
+    //         } else {
+    //             textoDeSalida = "Adios.";
+    //             estado = ESPERANDO;
+    //         }
+         }
+         return textoDeSalida;
+     }
 }

@@ -1,7 +1,7 @@
 import java.io.*;
 import java.net.*;
 
-public class ClienteTocToc {
+public class ClienteTocToc2 {
     public static void main(String[] args) throws IOException {
         //Declaramos el socket, escritor y lector
         Socket TocTocSocket = null; // declaramos un socket para recibir y enviar datos
@@ -13,8 +13,8 @@ public class ClienteTocToc {
 
         try {
             //abrimos el socket TocTocSocket para hacer peticiones al servidor //podremos abrir tres sockets para comunicarnos con los tres servidores 
-            TocTocSocket = new Socket("127.0.0.1", 4444); //Datos socket cliente
-            System.out.println("Estamos listos en el puerto " + 4444);
+            TocTocSocket = new Socket("127.0.0.1", 5000); //Datos socket cliente
+            System.out.println("Estamos listos en el puerto " + 5000);
             ////asignamos a lector y escritor el flujo de datos del socket
             EscritorEnSocket = new PrintWriter(TocTocSocket.getOutputStream(), true);
             LectorDeSocket = new BufferedReader(new InputStreamReader(TocTocSocket.getInputStream()));
@@ -33,6 +33,7 @@ public class ClienteTocToc {
         String DelUsuario;                                                                                          //Todo esto no va chanse si va pero se comenta el menje
 // leemos lo que dice el servidor , y si hay algo escrito procedemos a ingresar al ciclo while                      //Todo esto no va
         while ((DelServidor = LectorDeSocket.readLine()) != null) { //recibimos lo que dice uno de los servidores   //Todo esto no va
+            System.out.println("El Servidor dice: " + DelServidor);
             DelUsuario = EntradaTeclado.readLine();
             if (DelUsuario != null) {
                 System.out.println("El Cliente dice: " + DelUsuario);
@@ -44,7 +45,7 @@ public class ClienteTocToc {
            // si el usuario escribe Adios, significa que hay que cerrar la transmision de datos                     //Todo esto no va
           // if (DelServidor.equals("Adios."))                                                                       //Todo esto no va
                // break;                                                                                              //Todo esto no va
-// leeemos desde la consola del usuario
+          // leeemos desde la consola del usuario
            
             // si si leimos algo ( quiere decir que el usuario escribio algo) 
 	   
