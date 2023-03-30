@@ -37,6 +37,7 @@ suma_prog_1(char *host, int a, int b)
 int
 main (int argc, char *argv[])
 {
+	//En el main se gestionan las entradas para la llamada del servicio, para posteriormente realizar esta llamada.
 	char *host;
 	int a,b;
 	if (argc != 4) {
