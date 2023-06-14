@@ -41,7 +41,7 @@ public class PeerImp implements Runnable{
     }
     public static void main(String[] args) throws RemoteException, NotBoundException, IOException {
         //CONEXION A TRACKER
-        Registry registry = LocateRegistry.getRegistry("127.0.0.1", 1099);
+        Registry registry = LocateRegistry.getRegistry("192.168.0.21", 1099);
         TorrentTrack server = (TorrentTrack) registry.lookup("TorrentTrack");
         //SERVIDOR PROPIO
         PeerConnection peerC = new PeerConnection(args[0],args[1],Integer.parseInt(args[2]),server);
